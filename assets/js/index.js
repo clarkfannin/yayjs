@@ -6,8 +6,10 @@ document.getElementById("yay-form").addEventListener("submit", (e) => {
 		count: 80,
 		duration: 3500,
 		width: 16,
-		height: 8,
-		spread: 400,
-		mobileSpread: 50
+		height: 16,
+		spread: 300,
+		mobileSpread: 50,
+		color: "hotpink",
+		image: "assets/images/heart.svg"
 	});
 });
