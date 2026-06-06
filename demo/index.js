@@ -1,4 +1,4 @@
-import { yay } from "./yay.js";
+import { yay } from "../src/yay.js";
 
 document.getElementById("yay-form").addEventListener("submit", (e) => {
 	e.preventDefault();

@@ -1,0 +1,31 @@
+{
+  "name": "@clarkfannin/yayjs",
+  "version": "1.0.0",
+  "description": "lightweight confetti/burst effects with image support",
+  "type": "module",
+  "main": "src/yay.js",
+  "module": "src/yay.js",
+  "exports": {
+    ".": "./src/yay.js",
+    "./yay.css": "./src/yay.css"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "demo": "python3 -m http.server"
+  },
+  "keywords": [
+    "confetti",
+    "burst",
+    "celebrate",
+    "animation",
+    "effects"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clarkfannin/yayjs.git"
+  },
+  "author": "Clark Fannin",
+  "license": "MIT"
+}
