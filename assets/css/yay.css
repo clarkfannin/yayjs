@@ -1,0 +1,94 @@
+* {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100vh;
+}
+
+#yay-form {
+    background-color: rgb(250, 249, 240);
+    border-radius: 16px;
+    border: 2px solid black;
+    box-shadow: 2px 2px 2px black;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+}
+
+#yay-form-title {
+    text-align: center;
+    margin: 0 auto 8px;
+    font-size: 42px;
+}
+
+#yay-form-label {
+    display: inline-block;
+    max-width: 280px;
+    text-align: center;
+    font-size: 16px;
+    margin: 0 auto 16px;
+}
+
+#yay-form-input {
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 4px;
+}
+
+#yay-form-input-wrapper {
+    margin: 0 auto;
+}
+
+#yay-form-submit {
+    background: black;
+    border-radius: 8px;
+    color: rgb(250, 249, 240);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+}
+
+#yay-form-submit:active {
+    padding: 3px;
+    margin: 1px;
+}
+
+.yay-piece {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    display: block;
+    position: fixed;
+    animation: yay-fall var(--duration) ease-out both;
+}
+
+@keyframes yay-fall {
+    0% {
+        transform: translate(0, 0) rotate(var(--rot));
+        animation-timing-function: ease-out;
+        opacity: 1;
+    }
+
+    15% {
+        transform: translate(var(--burst-x), var(--burst-y)) rotate(calc(var(--rot) + 120deg));
+        animation-timing-function: ease-in;
+    }
+
+    100% {
+        transform: translate(calc(var(--burst-x) + var(--fall-x)), calc(100vh + 100%)) rotate(calc(var(--rot) + 540deg));
+        opacity: 1;
+    }
+}
