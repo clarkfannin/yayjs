@@ -10,6 +10,7 @@ body {
     align-items: center;
     position: relative;
     height: 100vh;
+    height: 100dvh;
 }
 
 #hooray-form {
