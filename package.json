@@ -1,13 +1,13 @@
 {
-  "name": "@clarkfannin/yayjs",
+  "name": "hoorayjs",
   "version": "1.0.0",
   "description": "lightweight confetti/burst effects with image support",
   "type": "module",
-  "main": "src/yay.js",
-  "module": "src/yay.js",
+  "main": "src/hooray.js",
+  "module": "src/hooray.js",
   "exports": {
-    ".": "./src/yay.js",
-    "./yay.css": "./src/yay.css"
+    ".": "./src/hooray.js",
+    "./hooray.css": "./src/hooray.css"
   },
   "files": [
     "src"

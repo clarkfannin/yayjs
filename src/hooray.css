@@ -12,7 +12,7 @@ body {
     height: 100vh;
 }
 
-#yay-form {
+#hooray-form {
     background-color: rgb(250, 249, 240);
     border-radius: 16px;
     border: 2px solid black;
@@ -22,13 +22,13 @@ body {
     padding: 16px;
 }
 
-#yay-form-title {
+#hooray-form-title {
     text-align: center;
     margin: 0 auto 8px;
     font-size: 42px;
 }
 
-#yay-form-label {
+#hooray-form-label {
     display: inline-block;
     max-width: 280px;
     text-align: center;
@@ -36,17 +36,17 @@ body {
     margin: 0 auto 16px;
 }
 
-#yay-form-input {
+#hooray-form-input {
     border-radius: 8px;
     font-size: 16px;
     padding: 4px;
 }
 
-#yay-form-input-wrapper {
+#hooray-form-input-wrapper {
     margin: 0 auto;
 }
 
-#yay-form-submit {
+#hooray-form-submit {
     background: black;
     border-radius: 8px;
     color: rgb(250, 249, 240);
@@ -55,12 +55,12 @@ body {
     padding: 4px;
 }
 
-#yay-form-submit:active {
+#hooray-form-submit:active {
     padding: 3px;
     margin: 1px;
 }
 
-.yay-piece {
+.hooray-piece {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -72,10 +72,10 @@ body {
     -webkit-mask-position: center;
     display: block;
     position: fixed;
-    animation: yay-fall var(--duration) ease-out both;
+    animation: hooray-fall var(--duration) ease-out both;
 }
 
-@keyframes yay-fall {
+@keyframes hooray-fall {
     0% {
         transform: translate(0, 0) rotate(var(--rot));
         animation-timing-function: ease-out;

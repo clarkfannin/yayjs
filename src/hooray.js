@@ -1,4 +1,4 @@
-class Yay {
+class Hooray {
 	static #isPainting = false;
 
 	#pieces;
@@ -22,7 +22,7 @@ class Yay {
 
 		if (this.#options.count > 2500) {
 			console.warn(
-				`yay: count capped at 2500 (requested ${this.options.count})`,
+				`hooray: count capped at 2500 (requested ${this.options.count})`,
 			);
 			this.options.count = 2500;
 		}
@@ -30,18 +30,18 @@ class Yay {
 		this.warn = () => {
 			if (this.#options.count > 1000)
 				console.warn(
-					"yay: a high count > 1000 is likely to impact performance",
+					"hooray: a high count > 1000 is likely to impact performance",
 				);
 		};
 		this.warn();
 	}
 
 	paint() {
-		if (Yay.#isPainting) return;
-		Yay.#isPainting = true;
+		if (Hooray.#isPainting) return;
+		Hooray.#isPainting = true;
 		for (let i = 0; i < this.#options.count; i++) {
 			const el = document.createElement("span");
-			el.classList.add("yay-piece");
+			el.classList.add("hooray-piece");
 
 			if (this.#options.image) {
 				// one value up front to retain image proportions
@@ -99,7 +99,7 @@ class Yay {
 		}
 
 		setTimeout(() => {
-			Yay.#isPainting = false;
+			Hooray.#isPainting = false;
 			this.cleanup();
 		}, this.#options.duration);
 	}
@@ -111,14 +111,14 @@ class Yay {
 	}
 }
 
-export const yay = (target, options = {}) => {
-	const y = new Yay(target, options);
+export const hooray = (target, options = {}) => {
+	const y = new Hooray(target, options);
 	y.paint();
 };
 
-document.querySelectorAll(".yay-target").forEach((el) => {
+document.querySelectorAll(".hooray-target").forEach((el) => {
 	el.addEventListener("click", (e) => {
-		yay(e.target, {
+		hooray(e.target, {
 			count: 1000,
 			duration: 2500,
 			width: 10,

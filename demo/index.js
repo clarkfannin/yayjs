@@ -1,8 +1,8 @@
-import { yay } from "../src/yay.js";
+import { hooray } from "../src/hooray.js";
 
-document.getElementById("yay-form").addEventListener("submit", (e) => {
+document.getElementById("hooray-form").addEventListener("submit", (e) => {
 	e.preventDefault();
-	yay(document.getElementById("yay-form-submit"), {
+	hooray(document.getElementById("hooray-form-submit"), {
 		count: 80,
 		duration: 3500,
 		width: 16,
