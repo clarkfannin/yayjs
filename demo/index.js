@@ -8,6 +8,7 @@ document.getElementById("hooray-form").addEventListener("submit", (e) => {
 		width: 16,
 		height: 8,
 		spread: 300,
-		mobileSpread: 50
+		mobileSpread: 50,
 	});
 });
+

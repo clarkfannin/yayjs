@@ -38,24 +38,55 @@ class Hooray {
 	paint() {
 		if (Hooray.#isPainting) return;
 		Hooray.#isPainting = true;
-		const frag = new DocumentFragment();
 
-		const spread =
-			window.innerWidth < 800
-				? this.#options.mobileSpread
-				: this.#options.spread;
+		this.#whenViewportSettled(() => {
+			const frag = new DocumentFragment();
 
-		for (let i = 0; i < this.#options.count; i++) {
-			const piece = new Piece(this.#target, this.#options, spread);
-			this.#pieces.push(piece);
-			frag.append(piece.el);
+			const spread =
+				window.innerWidth < 800
+					? this.#options.mobileSpread
+					: this.#options.spread;
+
+			const rect = this.#target.getBoundingClientRect();
+			const origin = {
+				x: rect.left + rect.width / 2,
+				y: rect.top + rect.height / 2,
+			};
+
+			for (let i = 0; i < this.#options.count; i++) {
+				const piece = new Piece(this.#options, origin, spread);
+				this.#pieces.push(piece);
+				frag.append(piece.el);
+			}
+			document.body.append(frag);
+
+			setTimeout(() => {
+				Hooray.#isPainting = false;
+				this.#cleanup();
+			}, this.#options.duration);
+		});
+	}
+
+	#whenViewportSettled(callback) {
+		const vv = window.visualViewport;
+		if (!vv) {
+			requestAnimationFrame(callback);
+			return;
 		}
-		document.body.append(frag);
 
-		setTimeout(() => {
-			Hooray.#isPainting = false;
-			this.#cleanup();
-		}, this.#options.duration);
+		let timer;
+		const settle = () => {
+			vv.removeEventListener("resize", onResize);
+			callback();
+		};
+		const onResize = () => {
+			clearTimeout(timer);
+			timer = setTimeout(settle, 100);
+		};
+
+		vv.addEventListener("resize", onResize);
+
+		timer = setTimeout(settle, 100);
 	}
 
 	#cleanup() {
@@ -66,15 +97,14 @@ class Hooray {
 }
 
 class Piece {
-
 	#el;
 	#options;
-	#target;
+	#origin;
 	#spread;
-	
-	constructor(target, options, spread) {
+
+	constructor(options, origin, spread) {
 		this.#options = options;
-		this.#target = target;
+		this.#origin = origin;
 		this.#spread = spread;
 		this.#el = document.createElement("span");
 		this.#el.classList.add("hooray-piece");
@@ -110,19 +140,30 @@ class Piece {
 	}
 
 	#applyPosition() {
-		const rect = this.#target.getBoundingClientRect();
-		this.#el.style.left = `${rect.left + rect.width / 2}px`;
-		this.#el.style.top = `${rect.top + rect.height / 2}px`;
+		this.#el.style.left = `${this.#origin.x}px`;
+		this.#el.style.top = `${this.#origin.y}px`;
 	}
 
 	#applyTrajectory() {
 		const angle = Math.random() * Math.PI * 2;
 		const cap = 80 + Math.random() * this.#spread;
-		this.#el.style.setProperty(`--burst-x`, `${Math.random() * Math.cos(angle) * cap}px`);
-		this.#el.style.setProperty(`--burst-y`, `${Math.random() * Math.sin(angle) * cap}px`);
+		this.#el.style.setProperty(
+			`--burst-x`,
+			`${Math.random() * Math.cos(angle) * cap}px`,
+		);
+		this.#el.style.setProperty(
+			`--burst-y`,
+			`${Math.random() * Math.sin(angle) * cap}px`,
+		);
 		this.#el.style.setProperty(`--fall-x`, `0px`);
-		this.#el.style.setProperty(`--rot`, `${Math.floor(Math.random() * 365)}deg`);
-		this.#el.style.setProperty(`--duration`, `${(this.#options.duration / 1000).toFixed(2)}s`);
+		this.#el.style.setProperty(
+			`--rot`,
+			`${Math.floor(Math.random() * 365)}deg`,
+		);
+		this.#el.style.setProperty(
+			`--duration`,
+			`${(this.#options.duration / 1000).toFixed(2)}s`,
+		);
 		this.#el.style.animationDelay = `${Math.random() * 0.1}s`;
 	}
 }
