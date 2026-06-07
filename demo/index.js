@@ -6,7 +6,7 @@ document.getElementById("hooray-form").addEventListener("submit", (e) => {
 		count: 80,
 		duration: 3500,
 		width: 16,
-		height: 16,
+		height: 8,
 		spread: 300,
 		mobileSpread: 50
 	});

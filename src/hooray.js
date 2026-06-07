@@ -20,119 +20,112 @@ class Hooray {
 			...options,
 		};
 
+		this.#warn();
+	}
+
+	#warn() {
 		if (this.#options.count > 2500) {
 			console.warn(
-				`hooray: count capped at 2500 (requested ${this.options.count})`,
+				`[hooray.js]:\nwarning: count capped at 2500. a high count is likely to impact performance.`,
 			);
-			this.options.count = 2500;
-		}
-
-		this.warn = () => {
-			if (this.#options.count > 1000)
-				console.warn(
-					"hooray: a high count > 1000 is likely to impact performance",
-				);
-		};
-		this.warn();
+			this.#options.count = 2500;
+		} else if (this.#options.count > 1000)
+			console.warn(
+				"[hooray.js]:\nwarning: a high count is likely to impact performance.",
+			);
 	}
 
 	paint() {
 		if (Hooray.#isPainting) return;
 		Hooray.#isPainting = true;
+		const frag = new DocumentFragment();
+
+		const spread =
+			window.innerWidth < 800
+				? this.#options.mobileSpread
+				: this.#options.spread;
+
 		for (let i = 0; i < this.#options.count; i++) {
-			const el = document.createElement("span");
-			el.classList.add("hooray-piece");
-
-			if (this.#options.image) {
-				// one value up front to retain image proportions
-				const rand = Math.random();
-				el.style.width = `${rand * this.#options.width}px`;
-				el.style.height = `${rand * this.#options.height}px`;
-
-				if (this.#options.color) {
-					el.style.backgroundColor = this.#options.color;
-					el.style.maskImage = `url(${this.#options.image})`;
-				} else {
-					el.style.backgroundImage = `url(${this.#options.image})`;
-				}
-			} else {
-				// randomize size if generating CSS confetti
-				el.style.width = `${Math.random() * this.#options.width}px`;
-				el.style.height = `${Math.random() * this.#options.height}px`;
-
-				// randomize color if generating CSS confetti
-				el.style.background = `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`;
-			}
-
-			const rect = this.#target.getBoundingClientRect();
-			el.style.left = `${rect.left + rect.width / 2}px`;
-			el.style.top = `${rect.top + rect.height / 2}px`;
-
-			const angle = Math.random() * Math.PI * 2;
-			const viewportWidth = window.innerWidth;
-			let distance;
-			if (viewportWidth < 800) {
-				distance = 80 + Math.random() * this.#options.mobileSpread;
-			} else {
-				distance = 80 + Math.random() * this.#options.spread;
-			}
-			el.style.setProperty(
-				`--burst-x`,
-				`${Math.random() * Math.cos(angle) * distance}px`,
-			);
-			el.style.setProperty(
-				`--burst-y`,
-				`${Math.random() * Math.sin(angle) * distance}px`,
-			);
-
-			el.style.setProperty(`--fall-x`, `0px`);
-			el.style.setProperty(`--rot`, `${Math.floor(Math.random() * 365)}deg`);
-
-			el.style.setProperty(
-				`--duration`,
-				`${(this.#options.duration / 1000).toFixed(2)}s`,
-			);
-			el.style.animationDelay = `${Math.random() * 0.1}s`;
-
-			this.#pieces.push(el);
-			document.body.append(el);
+			const piece = new Piece(this.#target, this.#options, spread);
+			this.#pieces.push(piece);
+			frag.append(piece.el);
 		}
+		document.body.append(frag);
 
 		setTimeout(() => {
 			Hooray.#isPainting = false;
-			this.cleanup();
+			this.#cleanup();
 		}, this.#options.duration);
 	}
 
-	cleanup() {
+	#cleanup() {
 		this.#pieces.forEach((piece) => {
-			piece.remove();
+			piece.el.remove();
 		});
+	}
+}
+
+class Piece {
+	#el;
+	#options;
+	#target;
+	#spread;
+	constructor(target, options, spread) {
+		this.#options = options;
+		this.#target = target;
+		this.#spread = spread;
+		this.#el = document.createElement("span");
+		this.#el.classList.add("hooray-piece");
+		this.#applySize();
+		this.#applyStyles();
+		this.#applyPosition();
+		this.#applyTrajectory();
+	}
+
+	get el() {
+		return this.#el;
+	}
+
+	#applySize() {
+		const wRand = Math.random();
+		const hRand = this.#options.image ? wRand : Math.random();
+		this.#el.style.width = `${wRand * this.#options.width}px`;
+		this.#el.style.height = `${hRand * this.#options.height}px`;
+	}
+
+	#applyStyles() {
+		if (!this.#options.image) {
+			this.#el.style.backgroundColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+			return;
+		}
+
+		if (this.#options.color) {
+			this.#el.style.backgroundColor = this.#options.color;
+			this.#el.style.maskImage = `url(${this.#options.image})`;
+		} else {
+			this.#el.style.backgroundImage = `url(${this.#options.image})`;
+		}
+	}
+
+	#applyPosition() {
+		const rect = this.#target.getBoundingClientRect();
+		this.#el.style.left = `${rect.left + rect.width / 2}px`;
+		this.#el.style.top = `${rect.top + rect.height / 2}px`;
+	}
+
+	#applyTrajectory() {
+		const angle = Math.random() * Math.PI * 2;
+		const cap = 80 + Math.random() * this.#spread;
+		this.#el.style.setProperty(`--burst-x`, `${Math.random() * Math.cos(angle) * cap}px`);
+		this.#el.style.setProperty(`--burst-y`, `${Math.random() * Math.sin(angle) * cap}px`);
+		this.#el.style.setProperty(`--fall-x`, `0px`);
+		this.#el.style.setProperty(`--rot`, `${Math.floor(Math.random() * 365)}deg`);
+		this.#el.style.setProperty(`--duration`, `${(this.#options.duration / 1000).toFixed(2)}s`);
+		this.#el.style.animationDelay = `${Math.random() * 0.1}s`;
 	}
 }
 
 export const hooray = (target, options = {}) => {
-	const y = new Hooray(target, options);
-	y.paint();
+	const h = new Hooray(target, options);
+	h.paint();
 };
-
-document.querySelectorAll(".hooray-target").forEach((el) => {
-	el.addEventListener("click", (e) => {
-		hooray(e.target, {
-			count: 1000,
-			duration: 2500,
-			width: 10,
-			height: 10,
-			spread: 100,
-		});
-	});
-});
-
-/*
-options: {
-    count: 200, // number of pieces; density
-    width: target.clientWidth / 10, // width in px
-    height: (target.clientWidth / 10) * 0.6, // height in px
-    duration: 3000, // duration of the animation from start to finish
-}
-*/
