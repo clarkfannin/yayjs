@@ -162,6 +162,7 @@ class Piece {
 	#applyBaseStyles() {
 		this.#el.style.display = "block";
 		this.#el.style.position = "fixed";
+		this.#el.style.pointerEvents = "none";
 
 		if (this.#options.image) {
 			if (this.#options.color) {
